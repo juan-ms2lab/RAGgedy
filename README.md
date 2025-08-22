@@ -13,6 +13,15 @@ RAGgedy is for the makers, the tinkerers, and the curious minds who want to chat
 - 🚀 **Real-time Progress** - See exactly what's happening during indexing
 - 🔍 **Powerful Search** - Retrieve up to 50 document chunks for comprehensive answers
 
+## 💻 System Requirements
+
+- **RAM**: 8GB minimum (4GB available for the AI model)
+- **Storage**: 10GB free space 
+- **OS**: macOS, Linux, or Windows
+- **Python**: 3.8 or higher
+
+*RAGgedy is designed to run on typical laptops and desktops - no GPU required!*
+
 ## 🚀 Quick Start
 
 ### 1. Install the Basics
@@ -22,7 +31,7 @@ brew install ollama  # macOS
 # or visit https://ollama.com for other platforms
 
 # Download a language model (this will take a few minutes)
-ollama pull gpt-oss:20b
+ollama pull phi3:mini
 
 # Install Python dependencies
 pip install chromadb pdfplumber sentence-transformers streamlit
@@ -65,9 +74,11 @@ Watch your documents get processed in real-time with progress bars and status up
 
 ### Multiple Models
 Choose from different AI models based on your needs:
-- `gpt-oss:20b` - Most capable (default)
-- `llama2:7b` - Faster responses
-- `mistral:7b` - Good balance
+- `phi3:mini` - Best balance of performance & size (default, ~4GB)
+- `tinyllama` - Ultra-fast, minimal resources (~2GB) 
+- `gemma2:2b` - Google's efficient model (~3GB)
+- `llama2:7b` - More capable but larger (~4.8GB)
+- `gpt-oss:20b` - Most capable but requires 16GB+ RAM
 
 ## 📁 Project Structure
 
@@ -126,7 +137,7 @@ RAGgedy was built with privacy in mind:
 
 ### "Model not found" error
 ```bash
-ollama pull gpt-oss:20b
+ollama pull phi3:mini
 ```
 
 ### "No vector database" error
@@ -135,9 +146,9 @@ python build_index.py rebuild docs/
 ```
 
 ### System running slow?
-- Try a smaller model: `llama2:7b`
+- Try an even smaller model: `tinyllama` or `gemma2:2b`
 - Reduce chunk retrieval count in the interface
-- Make sure you have enough RAM
+- Make sure you have at least 8GB RAM available
 
 ## 🤝 Contributing
 

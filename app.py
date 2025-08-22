@@ -24,7 +24,7 @@ import pandas as pd
 DB_DIR = "db"
 COLLECTION_NAME = "rag_docs"
 EMBED_MODEL = "all-MiniLM-L6-v2"
-DEFAULT_MODEL = "gpt-oss:20b"
+DEFAULT_MODEL = "phi3:mini"
 
 
 class RAGInterface:
@@ -160,7 +160,7 @@ Answer:"""
 def setup_streamlit_page():
     """Configure Streamlit page settings and styling."""
     st.set_page_config(
-        page_title="RAGgedy - GPT-OSS-20B",
+        page_title="RAGgedy - Local AI Assistant",
         page_icon="🧸",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -299,7 +299,7 @@ def main_query_interface(rag_interface: RAGInterface):
     with col2:
         model_option = st.selectbox(
             "Model",
-            [DEFAULT_MODEL, "llama2:7b", "mistral:7b"],
+            [DEFAULT_MODEL, "tinyllama", "gemma2:2b", "llama2:7b", "mistral:7b"],
             help="Select the Ollama model to use"
         )
     with col3:
