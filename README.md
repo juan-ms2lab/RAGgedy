@@ -1,10 +1,8 @@
 # 🧸 RAGgedy - Your Local AI Assistant
 
-*"Here's to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes... Because they change things."*
+RAGgedy is for the curious minds who want to chat with their documents without sending data to the cloud. It's a fully local RAG (Retrieval-Augmented Generation) system that runs entirely on your machine.
 
-RAGgedy is for the makers, the tinkerers, and the curious minds who want to chat with their documents without sending data to the cloud. It's a fully local RAG (Retrieval-Augmented Generation) system that runs entirely on your machine.
-
-**Created by [Juan Santos](https://github.com/juan-ms2lab) at [Imagiro](https://github.com/imagiro)**
+Created by Juan Santos at MS2-Lab
 
 ## ✨ What Makes RAGgedy Special
 
