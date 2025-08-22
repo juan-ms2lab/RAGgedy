@@ -297,10 +297,30 @@ def main_query_interface(rag_interface: RAGInterface):
     with col1:
         top_k = st.slider("Number of chunks to retrieve", 1, 50, 5)
     with col2:
+        # Get available models from Ollama
+        available_models = []
+        try:
+            result = subprocess.run(["ollama", "list"], capture_output=True, text=True, timeout=5)
+            if result.returncode == 0:
+                lines = result.stdout.strip().split('\n')[1:]  # Skip header
+                available_models = [line.split()[0] for line in lines if line.strip()]
+            
+            # If no models found, show default options
+            if not available_models:
+                available_models = [DEFAULT_MODEL, "tinyllama", "gemma2:2b", "llama2:7b", "mistral:7b"]
+                st.warning("⚠️ No models detected. Install models with: `ollama pull <model-name>`")
+        except:
+            available_models = [DEFAULT_MODEL, "tinyllama", "gemma2:2b", "llama2:7b", "mistral:7b"]
+            st.warning("⚠️ Could not connect to Ollama. Make sure Ollama is running.")
+        
+        # Ensure default model is in the list
+        if DEFAULT_MODEL not in available_models:
+            available_models.insert(0, DEFAULT_MODEL)
+        
         model_option = st.selectbox(
             "Model",
-            [DEFAULT_MODEL, "tinyllama", "gemma2:2b", "llama2:7b", "mistral:7b"],
-            help="Select the Ollama model to use"
+            available_models,
+            help="Select from your installed Ollama models"
         )
     with col3:
         show_context = st.checkbox("Show retrieved context", value=True)
@@ -555,21 +575,69 @@ def system_management_tab():
     # Model management
     st.subheader("Model Management")
     
+    # Get detailed model information
     available_models = []
+    model_details = {}
     try:
         result = subprocess.run(["ollama", "list"], capture_output=True, text=True)
         if result.returncode == 0:
-            lines = result.stdout.strip().split('\n')[1:]  # Skip header
-            available_models = [line.split()[0] for line in lines if line.strip()]
+            lines = result.stdout.strip().split('\n')
+            if len(lines) > 1:  # Has header
+                for line in lines[1:]:  # Skip header
+                    parts = line.split()
+                    if len(parts) >= 3:
+                        model_name = parts[0]
+                        model_id = parts[1] if len(parts) > 1 else ""
+                        model_size = parts[2] if len(parts) > 2 else ""
+                        modified = " ".join(parts[3:]) if len(parts) > 3 else ""
+                        available_models.append(model_name)
+                        model_details[model_name] = {
+                            'id': model_id,
+                            'size': model_size,
+                            'modified': modified
+                        }
     except:
         pass
     
     if available_models:
-        st.write("**Available Models:**")
+        st.write("**Installed Models:**")
         for model in available_models:
-            st.write(f"• {model}")
+            details = model_details.get(model, {})
+            col1, col2, col3 = st.columns([2, 1, 1])
+            with col1:
+                if model == DEFAULT_MODEL:
+                    st.write(f"🌟 **{model}** (default)")
+                else:
+                    st.write(f"📦 **{model}**")
+            with col2:
+                st.write(f"Size: {details.get('size', 'Unknown')}")
+            with col3:
+                st.write(f"Modified: {details.get('modified', 'Unknown')}")
     else:
-        st.warning("No Ollama models found. Install models using `ollama pull <model-name>`")
+        st.warning("No Ollama models found.")
+    
+    # Quick model installation
+    st.write("**Quick Install Popular Models:**")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    recommended_models = [
+        ("phi3:mini", "Recommended (4GB)"),
+        ("tinyllama", "Ultra-small (1GB)"),
+        ("gemma2:2b", "Efficient (3GB)"),
+        ("llama3.2:3b", "Capable (2GB)")
+    ]
+    
+    for i, (model_name, description) in enumerate(recommended_models):
+        with [col1, col2, col3, col4][i]:
+            if st.button(f"Install {model_name}", key=f"install_{model_name}"):
+                with st.spinner(f"Installing {model_name}..."):
+                    try:
+                        # Show installation command to user
+                        st.code(f"ollama pull {model_name}")
+                        st.info(f"Run this command in your terminal to install {model_name}")
+                    except Exception as e:
+                        st.error(f"Note: {e}")
+            st.caption(description)
 
 
 def main():
