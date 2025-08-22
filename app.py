@@ -123,13 +123,14 @@ class RAGInterface:
         except Exception as e:
             return f"Error: {str(e)}"
     
-    def build_prompt(self, query: str, contexts: List[str]) -> str:
+    def build_prompt(self, query: str, contexts: List[str], custom_prompt: str = None) -> str:
         """
         Build RAG prompt with context and query.
         
         Args:
             query: User question
             contexts: Retrieved context chunks
+            custom_prompt: Optional custom system prompt
             
         Returns:
             Formatted prompt for LLM
@@ -139,7 +140,11 @@ class RAGInterface:
         
         context = "\n".join(f"- {c.strip()}" for c in contexts if c.strip())
         
-        sys_prompt = """You are a helpful AI assistant. Use only the provided context to answer the question. 
+        # Use custom prompt if provided, otherwise use default
+        if custom_prompt:
+            sys_prompt = custom_prompt
+        else:
+            sys_prompt = """You are a helpful AI assistant. Use only the provided context to answer the question. 
 If the context doesn't contain enough information, say so clearly.
 Be concise and accurate in your response."""
         
@@ -155,8 +160,8 @@ Answer:"""
 def setup_streamlit_page():
     """Configure Streamlit page settings and styling."""
     st.set_page_config(
-        page_title="RAG System - GPT-OSS-20B",
-        page_icon="🔍",
+        page_title="RAGgedy - GPT-OSS-20B",
+        page_icon="🧸",
         layout="wide",
         initial_sidebar_state="expanded"
     )
@@ -277,7 +282,7 @@ def display_collection_stats(rag_interface: RAGInterface):
 
 def main_query_interface(rag_interface: RAGInterface):
     """Main query interface."""
-    st.markdown('<div class="main-header"><h1>🔍 RAG System with GPT-OSS-20B</h1></div>', 
+    st.markdown('<div class="main-header"><h1>🧸 RAGgedy - Your Local AI Assistant</h1></div>', 
                 unsafe_allow_html=True)
     
     # Query input
@@ -300,6 +305,26 @@ def main_query_interface(rag_interface: RAGInterface):
     with col3:
         show_context = st.checkbox("Show retrieved context", value=True)
     
+    # System prompt customization
+    with st.expander("🎯 Customize System Prompt", expanded=False):
+        st.write("**Default prompt:**")
+        default_prompt = """You are a helpful AI assistant. Use only the provided context to answer the question. 
+If the context doesn't contain enough information, say so clearly.
+Be concise and accurate in your response."""
+        st.code(default_prompt, language="text")
+        
+        custom_prompt = st.text_area(
+            "**Custom system prompt** (leave empty to use default):",
+            height=150,
+            placeholder="Enter your custom system prompt here...",
+            help="This prompt will guide how the AI responds to your questions. Use {context} and {question} as placeholders if needed."
+        )
+        
+        if custom_prompt:
+            st.info("Using custom system prompt")
+        else:
+            st.info("Using default system prompt")
+    
     # Query processing
     if st.button("Get Answer", type="primary") and query.strip():
         with st.spinner("Processing your question..."):
@@ -320,7 +345,7 @@ def main_query_interface(rag_interface: RAGInterface):
             if contexts:
                 # Generate answer
                 with st.status("Generating answer...") as status:
-                    full_prompt = rag_interface.build_prompt(query, contexts)
+                    full_prompt = rag_interface.build_prompt(query, contexts, custom_prompt if custom_prompt.strip() else None)
                     answer = rag_interface.ollama_infer(full_prompt, model_option)
                     status.update(label="Answer generated", state="complete")
                 
@@ -559,7 +584,7 @@ def main():
     display_collection_stats(rag_interface)
     
     # Main content tabs
-    tab1, tab2, tab3 = st.tabs(["🔍 Query", "📁 Documents", "⚙️ System"])
+    tab1, tab2, tab3 = st.tabs(["🧸 Chat", "📁 Documents", "⚙️ System"])
     
     with tab1:
         if status['vector_db'] and status['model']:
@@ -582,7 +607,7 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown(
-        "🤖 **Powered by:** [Ollama](https://ollama.com/) + "
+        "🧸 **RAGgedy** - Powered by [Ollama](https://ollama.com/) + "
         "[ChromaDB](https://www.trychroma.com/) + "
         "[SentenceTransformers](https://www.sbert.net/) + "
         "[Streamlit](https://streamlit.io/)"
