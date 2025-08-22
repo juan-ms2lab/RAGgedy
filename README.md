@@ -67,7 +67,13 @@ mkdir -p docs
 python build_index.py rebuild docs/
 
 # Launch RAGgedy
+python start_raggedy.py
+
+# Alternative manual launch:
 streamlit run app.py
+
+# If Streamlit asks for email, use headless mode:
+echo "" | streamlit run app.py --server.headless true
 ```
 
 ### 4. Start Chatting!
@@ -115,6 +121,9 @@ RAGgedy/
 If you installed RAGgedy as a package, you can use these convenient commands:
 
 ```bash
+# Launch RAGgedy with smart startup (recommended)
+raggedy
+
 # Process documents and build index
 raggedy-build-index rebuild docs/
 
@@ -133,6 +142,7 @@ raggedy-extract docs/
 
 Or use the Python scripts directly:
 ```bash
+python start_raggedy.py            # Smart launcher
 python build_index.py rebuild docs/
 python build_index.py query "What is machine learning?"
 python build_index.py stats
@@ -173,6 +183,17 @@ ollama pull phi3:mini
 ### "No vector database" error
 ```bash
 python build_index.py rebuild docs/
+```
+
+### Streamlit asks for email on startup
+```bash
+# Use headless mode to bypass email prompt:
+echo "" | streamlit run app.py --server.headless true
+
+# Or set Streamlit config to skip:
+mkdir -p ~/.streamlit
+echo "[browser]" > ~/.streamlit/config.toml
+echo "gatherUsageStats = false" >> ~/.streamlit/config.toml
 ```
 
 ### System running slow?

@@ -47,7 +47,7 @@ setup(
     install_requires=read_requirements(),
     entry_points={
         "console_scripts": [
-            "raggedy=app:main",
+            "raggedy=start_raggedy:main",
             "raggedy-build-index=build_index:main",
             "raggedy-extract=extract_and_chunk:main",
         ],
