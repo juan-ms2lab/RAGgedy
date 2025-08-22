@@ -22,6 +22,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Package build
+raggedy.egg-info/
+
 # Virtual environments
 .env
 .venv

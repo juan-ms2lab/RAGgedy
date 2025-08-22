@@ -34,18 +34,32 @@ brew install ollama  # macOS
 
 # Download a language model (this will take a few minutes)
 ollama pull phi3:mini
-
-# Install Python dependencies
-pip install chromadb pdfplumber sentence-transformers streamlit
 ```
 
-### 2. Set Up RAGgedy
+### 2. Install RAGgedy
+Choose one of these installation methods:
+
+#### Option A: Install from GitHub (Recommended)
 ```bash
-# Clone or download this project
-git clone [your-repo-url]
+# Clone the repository
+git clone https://github.com/juan-ms2lab/RAGgedy.git
 cd RAGgedy
 
-# Add your documents to the docs folder
+# Install dependencies
+pip install -r requirements.txt
+
+# Or install as a package
+pip install -e .
+```
+
+#### Option B: Install with pip (when available)
+```bash
+pip install raggedy
+```
+
+### 3. Set Up Your Documents
+```bash
+# Add your documents to the docs folder  
 mkdir -p docs
 # Copy your PDF or TXT files to docs/
 
@@ -56,7 +70,7 @@ python build_index.py rebuild docs/
 streamlit run app.py
 ```
 
-### 3. Start Chatting!
+### 4. Start Chatting!
 Open your browser to `http://localhost:8501` and start asking questions about your documents!
 
 ## 🎯 Features
@@ -98,18 +112,32 @@ RAGgedy/
 
 ### Command Line Tools
 
+If you installed RAGgedy as a package, you can use these convenient commands:
+
 ```bash
 # Process documents and build index
-python build_index.py rebuild docs/
+raggedy-build-index rebuild docs/
 
-# Query from command line
-python build_index.py query "What is machine learning?"
+# Query from command line  
+raggedy-build-index query "What is machine learning?"
 
 # Check system stats
-python build_index.py stats
+raggedy-build-index stats
 
 # Clear the index
+raggedy-build-index clear
+
+# Extract and process documents
+raggedy-extract docs/
+```
+
+Or use the Python scripts directly:
+```bash
+python build_index.py rebuild docs/
+python build_index.py query "What is machine learning?"
+python build_index.py stats
 python build_index.py clear
+python extract_and_chunk.py docs/
 ```
 
 ### Customization
