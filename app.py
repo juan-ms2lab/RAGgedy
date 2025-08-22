@@ -623,7 +623,7 @@ def system_management_tab():
     recommended_models = [
         ("phi3:mini", "Recommended (4GB)"),
         ("tinyllama", "Ultra-small (1GB)"),
-        ("gemma2:2b", "Efficient (3GB)"),
+        ("gpt-oss:20b", "Very capable (16GB)"),
         ("llama3.2:3b", "Capable (2GB)")
     ]
     
