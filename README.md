@@ -4,6 +4,8 @@
 
 RAGgedy is for the makers, the tinkerers, and the curious minds who want to chat with their documents without sending data to the cloud. It's a fully local RAG (Retrieval-Augmented Generation) system that runs entirely on your machine.
 
+**Created by [Juan Santos](https://github.com/juan) at [Imagiro](https://github.com/imagiro)**
+
 ## ✨ What Makes RAGgedy Special
 
 - 🏠 **Completely Local** - Your documents never leave your computer
@@ -154,6 +156,19 @@ python build_index.py rebuild docs/
 
 RAGgedy is for the makers and tinkerers. If you've got ideas, improvements, or just want to make it better, contributions are welcome!
 
+## 📄 License
+
+RAGgedy is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
+
+**You are free to:**
+- ✅ Share and redistribute for non-commercial purposes
+- ✅ Adapt, remix, and build upon the material for non-commercial purposes
+- ✅ Use for personal projects, education, and research
+
+**Attribution required:** Please credit Juan Santos (Imagiro) and link to this repository.
+
+For commercial licensing, please contact [juan@imagiro.com](mailto:juan@imagiro.com).
+
 ## 💝 Acknowledgments
 
 Built with love using:
@@ -161,6 +176,8 @@ Built with love using:
 - [ChromaDB](https://www.trychroma.com/) - Vector database
 - [Streamlit](https://streamlit.io/) - Web interface
 - [SentenceTransformers](https://www.sbert.net/) - Text embeddings
+
+**Created with assistance from [Claude AI](https://claude.ai/) by Anthropic**
 
 ---
 
